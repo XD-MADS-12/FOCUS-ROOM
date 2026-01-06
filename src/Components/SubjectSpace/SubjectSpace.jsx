@@ -1,1 +1,187 @@
+import React, { useState, useEffect } from 'react';
+import { BookOpen, CheckCircle, AlertCircle } from 'lucide-react';
 
+const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
+  const [activeSubject, setActiveSubject] = useState(null);
+  const [activePaper, setActivePaper] = useState('first');
+  const [noteContent, setNoteContent] = useState('');
+
+  useEffect(() => {
+    if (activeSubject) {
+      const key = `${activeSubject.id}-${activePaper}`;
+      setNoteContent(notes[key] || '');
+    }
+  }, [activeSubject, activePaper, notes]);
+
+  const handleNoteChange = async (content) => {
+    setNoteContent(content);
+    
+    // In a real app, this would update the database
+    console.log('Update notes for subject:', activeSubject.id, 'paper:', activePaper, 'content:', content);
+  };
+
+  const toggleChapter = async (chapterId) => {
+    // In a real app, this would update the database
+    console.log('Toggle chapter:', chapterId);
+  };
+
+  const toggleWeakTopic = async (chapterId) => {
+    // In a real app, this would update the database
+    console.log('Toggle weak topic:', chapterId);
+  };
+
+  if (!activeSubject) {
+    return (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold">Subject Space</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {subjects.map(subject => (
+            <button
+              key={subject.id}
+              onClick={() => setActiveSubject(subject)}
+              className="bg-white dark:bg-gray-800 rounded-xl p-6 text-left hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700"
+            >
+              <div className="flex items-center">
+                <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-400 mr-3" />
+                <h3 className="text-lg font-semibold">{subject.name}</h3>
+              </div>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                {chapters.filter(ch => ch.subject_id === subject.id).length} chapters
+              </p>
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const subjectChapters = chapters.filter(ch => ch.subject_id === activeSubject.id);
+  const firstPaperChapters = subjectChapters.filter(ch => ch.paper_type === 'first');
+  const secondPaperChapters = subjectChapters.filter(ch => ch.paper_type === 'second');
+  const singlePaperChapters = subjectChapters.filter(ch => ch.paper_type === 'single');
+
+  const allChapters = activePaper === 'first' 
+    ? firstPaperChapters 
+    : activePaper === 'second' 
+      ? secondPaperChapters 
+      : singlePaperChapters;
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => setActiveSubject(null)}
+          className="text-blue-600 dark:text-blue-400 hover:underline"
+        >
+          ← Back to Subjects
+        </button>
+        <h2 className="text-2xl font-bold">{activeSubject.name} Space</h2>
+      </div>
+
+      <div className="flex space-x-2">
+        {activeSubject.name === 'ICT' ? (
+          <button
+            onClick={() => setActivePaper('single')}
+            className={`px-4 py-2 rounded-lg font-medium ${
+              activePaper === 'single'
+                ? 'bg-blue-600 text-white'
+                : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+            }`}
+          >
+            Single Paper
+          </button>
+        ) : (
+          <>
+            <button
+              onClick={() => setActivePaper('first')}
+              className={`px-4 py-2 rounded-lg font-medium ${
+                activePaper === 'first'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+              }`}
+            >
+              1st Paper
+            </button>
+            <button
+              onClick={() => setActivePaper('second')}
+              className={`px-4 py-2 rounded-lg font-medium ${
+                activePaper === 'second'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300'
+              }`}
+            >
+              2nd Paper
+            </button>
+          </>
+        )}
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+        <h3 className="text-xl font-bold mb-4">Chapter Progress</h3>
+        <div className="space-y-2">
+          {allChapters.length > 0 ? (
+            allChapters.map(chapter => (
+              <div key={chapter.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div className="flex items-center">
+                  <button
+                    onClick={() => toggleChapter(chapter.id)}
+                    className={`h-5 w-5 rounded border-2 mr-3 ${
+                      chapter.is_completed 
+                        ? 'bg-green-500 border-green-500' 
+                        : 'border-gray-300 dark:border-gray-600'
+                    }`}
+                  >
+                    {chapter.is_completed && <CheckCircle className="h-4 w-4 text-white" />}
+                  </button>
+                  <span className={chapter.is_completed ? 'line-through text-gray-500' : ''}>
+                    {chapter.name}
+                  </span>
+                </div>
+                <button
+                  onClick={() => toggleWeakTopic(chapter.id)}
+                  className={`p-1 rounded ${
+                    chapter.weak_topic 
+                      ? 'text-red-600 dark:text-red-400' 
+                      : 'text-gray-400 hover:text-red-600'
+                  }`}
+                >
+                  <AlertCircle className="h-5 w-5" />
+                </button>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500 dark:text-gray-400">No chapters available for this paper</p>
+          )}
+        </div>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+        <h3 className="text-xl font-bold mb-4">Notes Editor</h3>
+        <textarea
+          value={noteContent}
+          onChange={(e) => handleNoteChange(e.target.value)}
+          className="w-full h-64 p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+          placeholder="Write your notes here..."
+        />
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+        <h3 className="text-xl font-bold mb-4">Weak Topics</h3>
+        <div className="space-y-2">
+          {allChapters.filter(ch => ch.weak_topic).length > 0 ? (
+            allChapters.filter(ch => ch.weak_topic).map(chapter => (
+              <div key={chapter.id} className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <span>{chapter.name}</span>
+                <button className="text-red-600 dark:text-red-400 text-sm">Mark as Reviewed</button>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500 dark:text-gray-400">No weak topics identified yet</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SubjectSpace;
