@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, CheckCircle, AlertCircle } from 'lucide-react';
+import { BookOpen, CheckCircle, AlertCircle, Plus, Trash2 } from 'lucide-react';
 
 const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
   const [activeSubject, setActiveSubject] = useState(null);
   const [activePaper, setActivePaper] = useState('first');
   const [noteContent, setNoteContent] = useState('');
+  const [showAddChapterModal, setShowAddChapterModal] = useState(false);
+  const [newChapter, setNewChapter] = useState({
+    name: '',
+    paper_type: 'first'
+  });
 
   useEffect(() => {
     if (activeSubject) {
@@ -30,6 +35,21 @@ const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
     console.log('Toggle weak topic:', chapterId);
   };
 
+  const addChapter = async () => {
+    // In a real app, this would add a new chapter to the database
+    console.log('Add chapter:', newChapter);
+    setShowAddChapterModal(false);
+    setNewChapter({
+      name: '',
+      paper_type: 'first'
+    });
+  };
+
+  const deleteChapter = async (chapterId) => {
+    // In a real app, this would delete a chapter from the database
+    console.log('Delete chapter:', chapterId);
+  };
+
   if (!activeSubject) {
     return (
       <div className="space-y-6">
@@ -39,7 +59,7 @@ const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
             <button
               key={subject.id}
               onClick={() => setActiveSubject(subject)}
-              className="bg-white dark:bg-gray-800 rounded-xl p-6 text-left hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700"
+              className="bg-white dark:bg-gray-800 rounded-xl p-6 text-left hover:shadow-lg transition-shadow border border-gray-200 dark:border-gray-700 card-hover"
             >
               <div className="flex items-center">
                 <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-400 mr-3" />
@@ -114,9 +134,17 @@ const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
             </button>
           </>
         )}
+        
+        <button
+          onClick={() => setShowAddChapterModal(true)}
+          className="ml-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm flex items-center"
+        >
+          <Plus className="h-4 w-4 mr-1" />
+          Add Chapter
+        </button>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
         <h3 className="text-xl font-bold mb-4">Chapter Progress</h3>
         <div className="space-y-2">
           {allChapters.length > 0 ? (
@@ -137,16 +165,24 @@ const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
                     {chapter.name}
                   </span>
                 </div>
-                <button
-                  onClick={() => toggleWeakTopic(chapter.id)}
-                  className={`p-1 rounded ${
-                    chapter.weak_topic 
-                      ? 'text-red-600 dark:text-red-400' 
-                      : 'text-gray-400 hover:text-red-600'
-                  }`}
-                >
-                  <AlertCircle className="h-5 w-5" />
-                </button>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => toggleWeakTopic(chapter.id)}
+                    className={`p-1 rounded ${
+                      chapter.weak_topic 
+                        ? 'text-red-600 dark:text-red-400' 
+                        : 'text-gray-400 hover:text-red-600'
+                    }`}
+                  >
+                    <AlertCircle className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => deleteChapter(chapter.id)}
+                    className="p-1 rounded text-gray-400 hover:text-red-600"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
             ))
           ) : (
@@ -155,7 +191,7 @@ const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
         <h3 className="text-xl font-bold mb-4">Notes Editor</h3>
         <textarea
           value={noteContent}
@@ -165,7 +201,7 @@ const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
         />
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
         <h3 className="text-xl font-bold mb-4">Weak Topics</h3>
         <div className="space-y-2">
           {allChapters.filter(ch => ch.weak_topic).length > 0 ? (
@@ -180,6 +216,53 @@ const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
           )}
         </div>
       </div>
+
+      {/* Add Chapter Modal */}
+      {showAddChapterModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Add New Chapter</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Chapter Name</label>
+                <input
+                  type="text"
+                  value={newChapter.name}
+                  onChange={(e) => setNewChapter({...newChapter, name: e.target.value})}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+                  placeholder="Enter chapter name"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Paper Type</label>
+                <select
+                  value={newChapter.paper_type}
+                  onChange={(e) => setNewChapter({...newChapter, paper_type: e.target.value})}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+                >
+                  <option value="first">1st Paper</option>
+                  <option value="second">2nd Paper</option>
+                  <option value="single">Single Paper</option>
+                </select>
+              </div>
+            </div>
+            <div className="mt-6 flex space-x-2">
+              <button
+                onClick={addChapter}
+                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
+              >
+                Add Chapter
+              </button>
+              <button
+                onClick={() => setShowAddChapterModal(false)}
+                className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
