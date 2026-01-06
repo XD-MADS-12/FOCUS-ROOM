@@ -20,7 +20,7 @@ const Settings = ({ session }) => {
     e.preventDefault();
     try {
       const { error } = await supabase.auth.updateUser({
-        data: {
+         {
           full_name: updateForm.name,
           dark_mode: darkMode
         }
@@ -75,7 +75,7 @@ const Settings = ({ session }) => {
         </div>
       )}
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
         <h3 className="text-xl font-bold mb-4">Profile Information</h3>
         <form onSubmit={handleUpdateProfile} className="space-y-4">
           <div>
@@ -121,7 +121,7 @@ const Settings = ({ session }) => {
         </form>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
         <h3 className="text-xl font-bold mb-4">Change Password</h3>
         <form onSubmit={handleChangePassword} className="space-y-4">
           <div>
@@ -169,7 +169,7 @@ const Settings = ({ session }) => {
         </form>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
         <h3 className="text-xl font-bold mb-4">Account</h3>
         <div className="space-y-4">
           <div className="flex items-center">
