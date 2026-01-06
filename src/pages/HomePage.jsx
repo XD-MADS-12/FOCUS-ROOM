@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import Sidebar from '../Components/Layout/Sidebar'; // Remove .jsx extension
+import Sidebar from '../Components/Layout/Sidebar';
 import Dashboard from '../Components/Dashboard/Dashboard';
 import StudyTracker from '../Components/StudyTracker/StudyTracker';
 import StudyPlanner from '../Components/StudyPlanner/StudyPlanner';
@@ -151,7 +151,7 @@ const HomePage = ({ session }) => {
           session={session}
           onEnterFocusMode={() => setShowFocusMode(true)}
         />
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900">
           {renderActiveTab()}
         </main>
       </div>
