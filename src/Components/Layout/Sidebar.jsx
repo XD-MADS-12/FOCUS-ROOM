@@ -1,8 +1,8 @@
 import React from 'react';
 import { BarChart3, CheckCircle, Calendar, Target, Settings, User, LogOut } from 'lucide-react';
-import { supabase } from '../../utils/supabaseClient';
+import { supabase } from '../../utils/supabaseClient.jsx';
 
-const Sidebar = ({ activeTab, setActiveTab, session }) => {
+const Sidebar = ({ activeTab, setActiveTab, session, onEnterFocusMode }) => {
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
@@ -35,6 +35,14 @@ const Sidebar = ({ activeTab, setActiveTab, session }) => {
               {item.label}
             </button>
           ))}
+          
+          <button
+            onClick={onEnterFocusMode}
+            className="w-full flex items-center px-3 py-2.5 rounded-lg text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+          >
+            <Target className="h-5 w-5 mr-3" />
+            Focus Mode
+          </button>
         </nav>
 
         <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
