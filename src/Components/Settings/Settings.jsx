@@ -20,7 +20,7 @@ const Settings = ({ session }) => {
     e.preventDefault();
     try {
       const { error } = await supabase.auth.updateUser({
-         {
+        data: {
           full_name: updateForm.name,
           dark_mode: darkMode
         }
