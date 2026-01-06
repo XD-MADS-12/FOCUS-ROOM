@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { supabase } from './utils/supabaseClient';
 import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage';
+import AuthCallback from './pages/AuthCallback';
 
 function App() {
   const [session, setSession] = useState(null);
@@ -23,6 +24,10 @@ function App() {
         <Route 
           path="/auth" 
           element={!session ? <AuthPage /> : <Navigate to="/" replace />} 
+        />
+        <Route 
+          path="/auth/callback" 
+          element={<AuthCallback />} 
         />
         <Route 
           path="/*" 
