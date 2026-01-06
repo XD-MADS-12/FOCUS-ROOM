@@ -36,9 +36,9 @@ const Dashboard = ({ subjects, sessions, tasks, chapters }) => {
 
   const getMotivationMessage = () => {
     const messages = [
-      "Every chapter you complete brings you closer to your dreams!",
-      "Consistency is the key to success - keep going!",
       "You're doing amazing! Just 7 months to go!",
+      "Consistency is the key to success - keep going!",
+      "Every chapter you complete brings you closer to your dreams!",
       "Small steps every day lead to big achievements!",
       "Believe in yourself - you've got this!"
     ];
@@ -66,8 +66,9 @@ const Dashboard = ({ subjects, sessions, tasks, chapters }) => {
 
   return (
     <div className="space-y-6">
+      {/* Header Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white">
+        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white card-hover">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-blue-100">Study Streak</p>
@@ -77,7 +78,7 @@ const Dashboard = ({ subjects, sessions, tasks, chapters }) => {
           </div>
         </div>
         
-        <div className="bg-gradient-to-r from-green-500 to-teal-600 rounded-xl p-6 text-white">
+        <div className="bg-gradient-to-r from-green-500 to-teal-600 rounded-xl p-6 text-white card-hover">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-green-100">Today's Study Time</p>
@@ -87,7 +88,7 @@ const Dashboard = ({ subjects, sessions, tasks, chapters }) => {
           </div>
         </div>
         
-        <div className="bg-gradient-to-r from-orange-500 to-red-600 rounded-xl p-6 text-white">
+        <div className="bg-gradient-to-r from-orange-500 to-red-600 rounded-xl p-6 text-white card-hover">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-orange-100">Days Left</p>
@@ -98,7 +99,8 @@ const Dashboard = ({ subjects, sessions, tasks, chapters }) => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+      {/* Today's Study Plan */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
         <h3 className="text-xl font-bold mb-4 flex items-center">
           <Target className="h-5 w-5 mr-2" />
           Today's Study Plan
@@ -126,7 +128,8 @@ const Dashboard = ({ subjects, sessions, tasks, chapters }) => {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
+      {/* Subject Progress Overview */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
         <h3 className="text-xl font-bold mb-4">Subject Progress Overview</h3>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
@@ -141,6 +144,7 @@ const Dashboard = ({ subjects, sessions, tasks, chapters }) => {
         </div>
       </div>
 
+      {/* Motivation Message */}
       <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-xl p-6">
         <div className="flex items-center">
           <AlertCircle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2" />
