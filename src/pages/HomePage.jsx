@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import Sidebar from '../components/Layout/Sidebar';
-import Dashboard from '../components/Dashboard/Dashboard';
-import StudyTracker from '../components/StudyTracker/StudyTracker';
-import StudyPlanner from '../components/StudyPlanner/StudyPlanner';
-import SubjectSpace from '../components/SubjectSpace/SubjectSpace';
-import FocusMode from '../components/FocusMode/FocusMode';
-import Settings from '../components/Settings/Settings';
-import { supabase } from '../utils/supabaseClient';
+import Sidebar from '../components/Layout/Sidebar.jsx'; // Added .jsx extension
+import Dashboard from '../components/Dashboard/Dashboard.jsx';
+import StudyTracker from '../components/StudyTracker/StudyTracker.jsx';
+import StudyPlanner from '../components/StudyPlanner/StudyPlanner.jsx';
+import SubjectSpace from '../components/SubjectSpace/SubjectSpace.jsx';
+import FocusMode from '../components/FocusMode/FocusMode.jsx';
+import Settings from '../components/Settings/Settings.jsx';
+import { supabase } from '../utils/supabaseClient.jsx';
 
 const HomePage = ({ session }) => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -17,6 +17,7 @@ const HomePage = ({ session }) => {
   const [userTasks, setUserTasks] = useState([]);
   const [userNotes, setUserNotes] = useState({});
   const [loading, setLoading] = useState(true);
+  const [showFocusMode, setShowFocusMode] = useState(false);
 
   useEffect(() => {
     fetchUserData();
@@ -26,7 +27,7 @@ const HomePage = ({ session }) => {
     setLoading(true);
     try {
       // Fetch subjects
-      const { data: subjects, error: subjectsError } = await supabase
+      const {  subjects, error: subjectsError } = await supabase
         .from('subjects')
         .select('*')
         .eq('user_id', session.user.id);
@@ -96,6 +97,10 @@ const HomePage = ({ session }) => {
     );
   }
 
+  if (showFocusMode) {
+    return <FocusMode subjects={userSubjects} onExit={() => setShowFocusMode(false)} />;
+  }
+
   const renderActiveTab = () => {
     switch (activeTab) {
       case 'dashboard':
@@ -144,6 +149,7 @@ const HomePage = ({ session }) => {
           activeTab={activeTab} 
           setActiveTab={setActiveTab} 
           session={session}
+          onEnterFocusMode={() => setShowFocusMode(true)}
         />
         <main className="flex-1 p-6">
           {renderActiveTab()}
