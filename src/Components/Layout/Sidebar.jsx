@@ -1,6 +1,6 @@
 import React from 'react';
 import { BarChart3, CheckCircle, Calendar, Target, Settings, User, LogOut } from 'lucide-react';
-import { supabase } from '../../utils/supabaseClient.jsx';
+import { supabase } from '../../utils/supabaseClient'; // Remove .jsx extension
 
 const Sidebar = ({ activeTab, setActiveTab, session, onEnterFocusMode }) => {
   const handleLogout = async () => {
