@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, Google } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, Chrome } from 'lucide-react';
 import { supabase } from '../utils/supabaseClient';
 
 const AuthPage = () => {
@@ -162,7 +162,7 @@ const AuthPage = () => {
             disabled={loading}
             className="w-full flex items-center justify-center gap-3 bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200 disabled:opacity-50"
           >
-            <Google className="h-5 w-5" />
+            <Chrome className="h-5 w-5" />
             Continue with Google
           </button>
         </div>
