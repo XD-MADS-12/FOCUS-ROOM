@@ -101,10 +101,15 @@ const Dashboard = ({ subjects, sessions, tasks, chapters }) => {
 
       {/* Today's Study Plan */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
-        <h3 className="text-xl font-bold mb-4 flex items-center">
-          <Target className="h-5 w-5 mr-2" />
-          Today's Study Plan
-        </h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-bold flex items-center">
+            <Target className="h-5 w-5 mr-2" />
+            Today's Study Plan
+          </h3>
+          <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
+            Add Task
+          </button>
+        </div>
         <div className="space-y-3">
           {todayTasks.length > 0 ? (
             todayTasks.map(task => (
