@@ -37,7 +37,7 @@ const AuthPage = () => {
           email: formData.email,
           password: formData.password,
           options: {
-            data: {
+             {
               full_name: formData.name
             }
           }
@@ -134,7 +134,7 @@ const AuthPage = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                className="absolute right-3 top-3.5 text-gray-400"
               >
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
