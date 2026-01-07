@@ -151,7 +151,7 @@ const HomePage = ({ session }) => {
           session={session}
           onEnterFocusMode={() => setShowFocusMode(true)}
         />
-        <main className="flex-1 p-6 bg-gray-50 dark:bg-gray-900">
+        <main className="flex-1 p-6">
           {renderActiveTab()}
         </main>
       </div>
