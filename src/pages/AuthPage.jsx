@@ -37,7 +37,7 @@ const AuthPage = () => {
           email: formData.email,
           password: formData.password,
           options: {
-            data: {
+             {
               full_name: formData.name
             }
           }
