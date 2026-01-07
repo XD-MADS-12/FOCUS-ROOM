@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, CheckCircle, AlertCircle, Plus, Trash2 } from 'lucide-react';
+import { BookOpen, CheckCircle, AlertCircle, Plus, Trash2, Edit3, Users } from 'lucide-react';
 
 const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
   const [activeSubject, setActiveSubject] = useState(null);
@@ -10,6 +10,13 @@ const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
     name: '',
     paper_type: 'first'
   });
+  const [leaderboard, setLeaderboard] = useState([
+    { id: 1, name: 'Rahim', study_time: 120, streak: 7 },
+    { id: 2, name: 'Karim', study_time: 90, streak: 5 },
+    { id: 3, name: 'Jahanara', study_time: 150, streak: 10 },
+    { id: 4, name: 'Mehedi', study_time: 80, streak: 3 },
+    { id: 5, name: 'Sadia', study_time: 110, streak: 6 }
+  ]);
 
   useEffect(() => {
     if (activeSubject) {
@@ -53,7 +60,14 @@ const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
   if (!activeSubject) {
     return (
       <div className="space-y-6">
-        <h2 className="text-2xl font-bold">Subject Space</h2>
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Subject Space</h2>
+          <div className="flex items-center bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
+            <Users className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
+            <span className="text-blue-600 dark:text-blue-400">Leaderboard</span>
+          </div>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {subjects.map(subject => (
             <button
@@ -70,6 +84,38 @@ const SubjectSpace = ({ subjects, chapters, notes, onNotesUpdate }) => {
               </p>
             </button>
           ))}
+        </div>
+        
+        {/* Leaderboard */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
+          <h3 className="text-xl font-bold mb-4 flex items-center">
+            <Users className="h-5 w-5 mr-2" />
+            Leaderboard
+          </h3>
+          <div className="space-y-3">
+            {leaderboard.map((student, index) => (
+              <div key={student.id} className={`flex items-center justify-between p-3 rounded-lg ${
+                index === 0 ? 'bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800' :
+                index === 1 ? 'bg-gray-50 dark:bg-gray-700' :
+                'bg-white dark:bg-gray-800'
+              }`}>
+                <div className="flex items-center">
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                    index === 0 ? 'bg-yellow-400 text-white' :
+                    index === 1 ? 'bg-gray-400 text-white' :
+                    'bg-blue-400 text-white'
+                  }`}>
+                    {index + 1}
+                  </div>
+                  <span className="ml-3 font-medium">{student.name}</span>
+                </div>
+                <div className="text-right">
+                  <div className="text-sm">Study Time: {student.study_time} min</div>
+                  <div className="text-sm">Streak: {student.streak} days</div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
