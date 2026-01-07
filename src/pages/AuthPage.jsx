@@ -33,16 +33,16 @@ const AuthPage = () => {
         });
         if (error) throw error;
       } else {
-        const { error } = await supabase.auth.signUp({
-          email: formData.email,
-          password: formData.password,
-          options: {
-             {
-              full_name: formData.name
-            }
-          }
-        });
-        if (error) throw error;
+  const { error } = await supabase.auth.signUp({
+    email: formData.email,
+    password: formData.password,
+    options: {
+      data: {
+        full_name: formData.name
+      }
+    }
+  });
+  if (error) throw error;
       }
     } catch (error) {
       setError(error.message);
