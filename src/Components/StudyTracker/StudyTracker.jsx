@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CheckCircle, Clock, TrendingUp, Calendar } from 'lucide-react';
+import { CheckCircle, Clock, TrendingUp, Calendar, Plus, Trash2, Edit3 } from 'lucide-react';
 
 const StudyTracker = ({ subjects, sessions, tasks, chapters }) => {
   const [studyStreak, setStudyStreak] = useState(0);
@@ -13,6 +13,13 @@ const StudyTracker = ({ subjects, sessions, tasks, chapters }) => {
     totalStudyTime: 0,
     completedChapters: 0,
     studyStreak: 0
+  });
+  const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+  const [newTask, setNewTask] = useState({
+    subject_id: '',
+    chapter_id: '',
+    task_description: '',
+    date: new Date().toISOString().split('T')[0]
   });
 
   useEffect(() => {
@@ -104,6 +111,23 @@ const StudyTracker = ({ subjects, sessions, tasks, chapters }) => {
   const toggleChapterCompletion = async (chapterId) => {
     // In a real app, this would update the database
     console.log('Toggle chapter completion:', chapterId);
+  };
+
+  const addTask = async () => {
+    // In a real app, this would add a new task to the database
+    console.log('Add task:', newTask);
+    setShowAddTaskModal(false);
+    setNewTask({
+      subject_id: '',
+      chapter_id: '',
+      task_description: '',
+      date: new Date().toISOString().split('T')[0]
+    });
+  };
+
+  const deleteTask = async (taskId) => {
+    // In a real app, this would delete a task from the database
+    console.log('Delete task:', taskId);
   };
 
   return (
@@ -198,10 +222,20 @@ const StudyTracker = ({ subjects, sessions, tasks, chapters }) => {
 
       {/* Study Sessions */}
       <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
-        <h3 className="text-xl font-bold mb-4 flex items-center">
-          <CheckCircle className="h-5 w-5 mr-2" />
-          Study Sessions
-        </h3>
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-xl font-bold flex items-center">
+            <CheckCircle className="h-5 w-5 mr-2" />
+            Study Sessions
+          </h3>
+          <button
+            onClick={() => setShowAddTaskModal(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm flex items-center"
+          >
+            <Plus className="h-4 w-4 mr-1" />
+            Add Task
+          </button>
+        </div>
+        
         <div className="space-y-3">
           {sessions.slice(0, 5).map(session => (
             <div key={session.id} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -218,6 +252,103 @@ const StudyTracker = ({ subjects, sessions, tasks, chapters }) => {
           ))}
         </div>
       </div>
+
+      {/* To-Do List */}
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 card-hover">
+        <h3 className="text-xl font-bold mb-4">To-Do List</h3>
+        <div className="space-y-3">
+          {tasks.length > 0 ? (
+            tasks.map(task => (
+              <div key={task.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={task.is_completed}
+                    onChange={() => {}}
+                    className="h-4 w-4 text-blue-600 rounded"
+                  />
+                  <span className={`ml-3 ${task.is_completed ? 'line-through text-gray-500' : ''}`}>
+                    {subjects.find(s => s.id === task.subject_id)?.name || 'Unknown Subject'} - {task.task_description}
+                  </span>
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => {}}
+                    className="p-1 rounded text-gray-400 hover:text-red-600"
+                  >
+                    <Edit3 className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => deleteTask(task.id)}
+                    className="p-1 rounded text-gray-400 hover:text-red-600"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500 dark:text-gray-400">No tasks scheduled</p>
+          )}
+        </div>
+      </div>
+
+      {/* Add Task Modal */}
+      {showAddTaskModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Add New Task</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Subject</label>
+                <select
+                  value={newTask.subject_id}
+                  onChange={(e) => setNewTask({...newTask, subject_id: e.target.value})}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+                >
+                  <option value="">Select Subject</option>
+                  {subjects.map(subject => (
+                    <option key={subject.id} value={subject.id}>{subject.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Task Description</label>
+                <input
+                  type="text"
+                  value={newTask.task_description}
+                  onChange={(e) => setNewTask({...newTask, task_description: e.target.value})}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+                  placeholder="Enter task description"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Due Date</label>
+                <input
+                  type="date"
+                  value={newTask.date}
+                  onChange={(e) => setNewTask({...newTask, date: e.target.value})}
+                  className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700"
+                />
+              </div>
+            </div>
+            <div className="mt-6 flex space-x-2">
+              <button
+                onClick={addTask}
+                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg"
+              >
+                Add Task
+              </button>
+              <button
+                onClick={() => setShowAddTaskModal(false)}
+                className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-lg"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
